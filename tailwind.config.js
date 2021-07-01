@@ -1,14 +1,14 @@
-const colors = require("tailwindcss/colors");
+const colors = require('tailwindcss/colors')
 
 module.exports = {
-  mode: "jit",
-  purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  mode: 'jit',
+  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
     fontFamily: {
-      sans: ["Roboto"],
-      logo: ["Pattaya"],
+      sans: ['Roboto'],
+      logo: ['Pattaya'],
     },
     colors: {
       // primary: {
@@ -21,13 +21,14 @@ module.exports = {
       blue: colors.blue,
       cyan: colors.cyan,
       white: colors.white,
-      primary: "#193F6C",
-      lightblue: "#3F78AD",
-      lightgrey: "#EEF6FA",
+      primary: '#193F6C',
+      lightblue: '#3F78AD',
+      lightgrey: '#EEF6FA',
+      darkblue: '#0C3B95',
     },
   },
   variants: {
     extend: {},
   },
   plugins: [],
-};
+}
