@@ -14,6 +14,8 @@ export default function register() {
   const [phone, setPhone] = useState('')
   const [company, setCompany] = useState('')
   const [age, setAge] = useState(null)
+  const [fields, setFields] = useState('')
+  const [bio, setBio] = useState('')
 
   const handleSubmit = () => {
     const user = {
@@ -69,7 +71,7 @@ export default function register() {
     return (
       <>
         <p
-          className='cursor-pointer hover:underline'
+          className='cursor-pointer h-8 w-1/5 rounded-lg flex items-center justify-center text-white bg-grey'
           onClick={() => {
             setPage(1)
           }}
@@ -78,27 +80,27 @@ export default function register() {
         </p>
         <form action='' className='mt-6' onSubmit={handleSubmit}>
           <div className='w-4/5 mx-auto mt-6'>
-            <label>Email</label>
+            <label className='text-primary'>Email</label>
             <input
-              className='w-full h-16 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg'
+              className='w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg'
               type='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div className='w-4/5 mx-auto mt-6'>
-            <label>Password</label>
+            <label className='text-primary'>Password</label>
             <input
-              className='w-full h-16 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg'
-              type='password'
+              className='w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg'
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
           </div>
           <div className='w-4/5 mx-auto mt-6'>
-            <label>Phone Number</label>
+            <label className='text-primary'>Phone Number</label>
             <input
-              className='w-full h-16 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg'
+              className='w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg'
               type='text'
               onChange={(e) => setPhone(e.target.value)}
               value={phone}
@@ -107,19 +109,70 @@ export default function register() {
 
           {role === 'STUDENT' ? (
             <div className='w-4/5 mx-auto mt-6'>
-              <label>Age</label>
+              <br />
+              <label className='text-primary'>Age</label>
               <input
-                className='w-full h-16 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg'
+                className='w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg'
                 type='number'
                 onChange={(e) => setAge(e.target.value)}
                 value={age}
               />
+              <br />
+              <br />
+              <label className='text-primary'>Work Exp: </label>
+              <input
+                type='radio'
+                id='internship'
+                value='Internship'
+                name='work'
+                className='mx-1'
+              />
+              <label for='internship mt-3'>Internship</label>
+
+              <input
+                type='radio'
+                id='fulltime'
+                value='Full Time'
+                name='work'
+                className='mx-1'
+              />
+              <label for='fulltime'>Full Time</label>
+              <input
+                type='radio'
+                id='parttime'
+                value='Part Time'
+                name='work'
+                className='mx-1'
+              />
+              <label for='parttime'>Part Time</label>
+              <br />
+              <br />
+              <label className='text-primary'>Fields Intrested</label>
+              <input
+                className='w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg'
+                type='text'
+                value={fields}
+                onChange={(e) => setFields(e.target.value)}
+                required
+              />
+              <br />
+              <br />
+              <label className='text-primary mt-3'>
+                Write about your skills and experience (In not more than 50
+                words)
+              </label>
+              <textarea
+                className='w-full focus:outline-none focus:bg-white h-18 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg'
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                required
+              />
             </div>
           ) : (
             <div className='w-4/5 mx-auto mt-6'>
-              <label>Company</label>
+              <label className='text-primary'>Company Name</label>
               <input
-                className='w-full h-16 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg'
+                className='w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg'
                 type='text'
                 onChange={(e) => setCompany(e.target.value)}
                 value={company}
@@ -127,12 +180,12 @@ export default function register() {
             </div>
           )}
 
-          <button
-            type='submit'
+          <a
+            href={role === 'STUDENT' ? '/salary' : '/recruiterAdd'}
             className='h-14 w-1/3 rounded-lg mt-12 mx-auto flex items-center justify-center text-white bg-primary'
           >
             Sign Up
-          </button>
+          </a>
         </form>
       </>
     )
