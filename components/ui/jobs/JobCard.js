@@ -1,12 +1,32 @@
-import React from "react";
+import React, { useState, useContext } from "react";
+import PredictionContext from "../../../context/predictions/predictionContext";
+import axios from "axios";
 
 const JobCard = ({ job }) => {
+  const predictionContext = useContext(PredictionContext);
+
+  const [predictedJobStatus, setPredictedJobStatus] = useState("");
+
+  const { predictedSalary, fetchSalaryWithJobDescription } = predictionContext;
+
   const format = (str) => {
     const newstr = str.replace("<strong>", "");
     const newnew = newstr.replace("</strong>", "");
 
     return newnew;
   };
+
+  const handlePredictChances = async () => {
+    const data = {
+      JobDescription: format(job.description),
+      salary: predictedSalary,
+    };
+
+    const res = await axios.post("http://0.0.0.0:5000/job", data);
+
+    setPredictedJobStatus(res.data);
+  };
+
   return (
     <div className="bg-white h-auto rounded-lg p-3 text-primary flex flex-col">
       <div>
@@ -40,9 +60,19 @@ const JobCard = ({ job }) => {
         <p className="mt-3">{format(job.description)}</p>
       </div>
 
+      {predictedJobStatus && (
+        <div className="border-2 border-green text-darkgreen p-3 mx-auto mt-3">
+          <p>
+            Your chances of getting selected in this company are{" "}
+            {predictedJobStatus.placed === "Not Placed" ? "high" : "low"}
+          </p>
+          <p>Your predicted salary is around {predictedJobStatus.salary}</p>
+        </div>
+      )}
+
       <div className="flex w-full my-auto ">
         <button
-          type="submit"
+          onClick={handlePredictChances}
           className="h-14 w-3/5 mr-3 rounded-lg mt-12 mx-auto flex items-center justify-center text-white bg-primary"
         >
           Predict your chances

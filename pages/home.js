@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Navbar from "../components/ui/Navbar";
 import SearchJobBar from "../components/ui/SearchJobBar";
 import JobList from "../components/ui/jobs/JobList";
 import Loader from "../components/ui/Loader";
+import { useRouter } from "next/router";
+import AuthContext from "../context/auth/authContext";
 
 import axios from "axios";
 
@@ -12,6 +14,9 @@ const home = () => {
   const [locationSearch, setLocationSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const authContext = useContext(AuthContext);
+  const router = useRouter();
+  const { isAuthenticated } = authContext;
   const fetchJobs = async (job, location) => {
     setLoading(true);
     const res = await axios.get(
@@ -26,7 +31,9 @@ const home = () => {
     // console.log(job, location);
   };
 
-  useEffect(() => {}, [jobs]);
+  useEffect(() => {
+    if (!isAuthenticated) router.push("/");
+  }, [isAuthenticated, jobs]);
 
   const handleSearchClick = (e) => {
     e.preventDefault();
