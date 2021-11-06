@@ -16,7 +16,7 @@ import Cookie from "js-cookie";
 const AuthState = (props) => {
   const initialState = {
     token: Cookie.get("token") ? Cookie.getJSON("token") : "",
-    isAuthenticated: null,
+    isAuthenticated: Cookie.get("token") ? true : false,
     loading: true,
     user: null,
     error: null,
