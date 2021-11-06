@@ -24,6 +24,13 @@ module.exports = {
       primary: "#193F6C",
       lightblue: "#3F78AD",
       lightgrey: "#EEF6FA",
+      grey: "#8C8888",
+      darkblue: "#0C3B95",
+      emerald: "#10B981",
+      red: "#EF4444",
+      green: "#00FF00",
+      darkgreen: "#006400",
+      blueGray: colors.blueGray,
     },
   },
   variants: {

@@ -3,28 +3,107 @@ import student from "../public/student.png";
 import recruiter from "../public/recruiter.png";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import AuthContext from "../context/auth/authContext";
+import { useRouter } from "next/router";
 
 export default function register() {
   const [page, setPage] = useState(1);
-  const [role, setRole] = useState("");
+  const [roleField, setRoleField] = useState("");
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [company, setCompany] = useState("");
   const [age, setAge] = useState(null);
+  const [fields, setFields] = useState("");
+  const [description, setDescription] = useState("");
+  const [jobType, setJobType] = useState("");
 
-  const handleSubmit = () => {
-    const user = {
-      email,
-      password,
-      phone,
-      company,
-      age,
-    };
+  const [errorMessage, setErrorMessage] = useState("");
 
-    console.log("user is", user);
+  const router = useRouter();
+  const authContext = useContext(AuthContext);
+
+  const { register, error, isAuthenticated, role } = authContext;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (role[0] === "STUDENT") router.push("/salary");
+      else router.push("/recruiterHome");
+    }
+
+    if (error) setErrorMessage(error);
+  }, [isAuthenticated, error]);
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+
+    if (roleField === "STUDENT") {
+      if (
+        name === "" ||
+        email === "" ||
+        password === "" ||
+        age === "" ||
+        fields === "" ||
+        description === "" ||
+        jobType === "" ||
+        phone === ""
+      )
+        setErrorMessage("Please enter all fields");
+      else {
+        const user = {
+          name,
+          email,
+          password,
+          phone,
+          company,
+          age,
+          role: roleField,
+          jobType,
+          fields,
+          description,
+        };
+        register(user);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setCompany("");
+        setPhone("");
+        setAge("");
+        setFields("");
+        setDescription("");
+        setJobType("");
+        setRoleField("");
+        setErrorMessage("");
+      }
+    } else {
+      if (email === "" || password === "" || company === "" || phone === "")
+        setErrorMessage("Please enter all fields");
+      else {
+        const user = {
+          name,
+          email,
+          password,
+          phone,
+          company,
+          role: roleField,
+        };
+        register(user);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setCompany("");
+        setPhone("");
+        setAge("");
+        setFields("");
+        setDescription("");
+        setJobType("");
+        setRoleField("");
+        setErrorMessage("");
+      }
+    }
   };
   const roleSelect = () => {
     return (
@@ -35,7 +114,7 @@ export default function register() {
             className="cursor-pointer"
             onClick={() => {
               setPage(2);
-              setRole("STUDENT");
+              setRoleField("STUDENT");
             }}
           >
             <Image src={student} width={180} height={150} />
@@ -48,7 +127,7 @@ export default function register() {
             className="cursor-pointer"
             onClick={() => {
               setPage(2);
-              setRole("RECRUITER");
+              setRoleField("RECRUITER");
             }}
           >
             <Image src={recruiter} width={180} height={150} />
@@ -69,57 +148,127 @@ export default function register() {
     return (
       <>
         <p
-          className="cursor-pointer hover:underline"
+          className="cursor-pointer h-8 w-1/5 rounded-lg flex items-center justify-center text-white bg-grey"
           onClick={() => {
             setPage(1);
           }}
         >
           Back
         </p>
-        <form action="" className="mt-6" onSubmit={handleSubmit}>
+        <div className="w-full flex justify-center items-center">
+          {errorMessage && (
+            <p className="text-red text-lg mt-6">{errorMessage}</p>
+          )}
+        </div>
+        <form action="" className="mt-6">
           <div className="w-4/5 mx-auto mt-6">
-            <label>Email</label>
+            <label className="text-primary">Name</label>
             <input
-              className="w-full h-16 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              className="w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
             />
           </div>
           <div className="w-4/5 mx-auto mt-6">
-            <label>Password</label>
+            <label className="text-primary">Email</label>
             <input
-              className="w-full h-16 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
+              className="w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="w-4/5 mx-auto mt-6">
+            <label className="text-primary">Password</label>
+            <input
+              className="w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
               type="password"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
           </div>
           <div className="w-4/5 mx-auto mt-6">
-            <label>Phone Number</label>
+            <label className="text-primary">Phone Number</label>
             <input
-              className="w-full h-16 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
+              className="w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
               type="text"
               onChange={(e) => setPhone(e.target.value)}
               value={phone}
             />
           </div>
 
-          {role === "STUDENT" ? (
+          {roleField === "STUDENT" ? (
             <div className="w-4/5 mx-auto mt-6">
-              <label>Age</label>
+              <br />
+              <label className="text-primary">Age</label>
               <input
-                className="w-full h-16 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
+                className="w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
                 type="number"
                 onChange={(e) => setAge(e.target.value)}
                 value={age}
               />
+              <br />
+              <br />
+              <label className="text-primary">Looking for</label>
+              <input
+                type="radio"
+                id="internship"
+                value="Internship"
+                name="work"
+                onChange={(e) => setJobType(e.target.value)}
+                className="mx-1"
+              />
+              <label for="internship mt-3">Internship</label>
+
+              <input
+                type="radio"
+                id="fulltime"
+                value="Full-time"
+                name="work"
+                className="mx-1"
+                onChange={(e) => setJobType(e.target.value)}
+              />
+              <label for="fulltime">Full Time</label>
+              <input
+                type="radio"
+                id="parttime"
+                value="Part-time"
+                name="work"
+                className="mx-1"
+                onChange={(e) => setJobType(e.target.value)}
+              />
+              <label for="parttime">Part Time</label>
+              <br />
+              <br />
+              <label className="text-primary">Fields Intrested</label>
+              <input
+                className="w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
+                type="text"
+                value={fields}
+                onChange={(e) => setFields(e.target.value)}
+                required
+              />
+              <br />
+              <br />
+              <label className="text-primary mt-3">
+                Write about your skills and experience (In not more than 50
+                words)
+              </label>
+              <textarea
+                className="w-full focus:outline-none focus:bg-white h-18 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
             </div>
           ) : (
             <div className="w-4/5 mx-auto mt-6">
-              <label>Company</label>
+              <label className="text-primary">Company Name</label>
               <input
-                className="w-full h-16 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
+                className="w-full focus:outline-none focus:bg-white h-10 mt-3 p-3 bg-lightgrey border-2 border-lightblue rounded-lg"
                 type="text"
                 onChange={(e) => setCompany(e.target.value)}
                 value={company}
@@ -128,7 +277,7 @@ export default function register() {
           )}
 
           <button
-            type="submit"
+            onClick={handleSignUp}
             className="h-14 w-1/3 rounded-lg mt-12 mx-auto flex items-center justify-center text-white bg-primary"
           >
             Sign Up

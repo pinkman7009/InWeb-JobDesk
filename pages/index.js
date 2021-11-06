@@ -3,7 +3,7 @@ import Login from "../components/ui/Login";
 import login from "../public/login.png";
 import Image from "next/image";
 
-export default function Home() {
+export default function LoginPage() {
   return (
     <>
       <div className="bg-gradient-to-b from-blue-900  to-cyan-400 h-screen w-screen">
